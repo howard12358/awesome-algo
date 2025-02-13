@@ -1,4 +1,4 @@
-package main
+package divide_and_conquer
 
 // 归并排序
 func mergeSort(nums []int) []int {
