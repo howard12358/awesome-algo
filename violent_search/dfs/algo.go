@@ -10,6 +10,8 @@ func permute(nums []int) [][]int {
 	return res
 }
 
+// track 表示 nums 已经选择的路径
+// used 表示已经做出的选择和已经剩余的选择
 func backtrack(nums []int, track []int, used []bool, res *[][]int) {
 	if len(track) == len(nums) {
 		temp := make([]int, len(track))
@@ -19,7 +21,9 @@ func backtrack(nums []int, track []int, used []bool, res *[][]int) {
 	}
 
 	for i := range nums {
+		// 排除重复的选择
 		if used[i] {
+			// 剪枝，避免重复使用同一个数字
 			continue
 		}
 		// 做选择
