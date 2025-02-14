@@ -36,3 +36,36 @@ func backtrack(nums []int, track []int, used []bool, res *[][]int) {
 		used[i] = false
 	}
 }
+
+// 全排列II https://leetcode.cn/problems/permutations-ii/description/
+func permuteUnique(nums []int) [][]int {
+	var res [][]int
+	var track []int
+	used := make([]bool, len(nums))
+	backtrack2(nums, track, used, &res)
+	return res
+}
+
+func backtrack2(nums []int, track []int, used []bool, res *[][]int) {
+	if len(nums) == len(track) {
+		temp := append([]int{}, track...)
+		*res = append(*res, temp)
+		return
+	}
+	// 记录已经尝试过的元素，保证本轮循环中相等元素只被选择一次
+	// https://www.hello-algo.com/chapter_backtracking/permutations_problem/#3
+	duplicated := make(map[int]struct{})
+	for i := range nums {
+		_, ok := duplicated[nums[i]]
+		// 剪枝，nums中相同位置的元素和相同的元素都被剪去
+		if used[i] || ok {
+			continue
+		}
+		duplicated[nums[i]] = struct{}{}
+		used[i] = true
+		track = append(track, nums[i])
+		backtrack2(nums, track, used, res)
+		track = track[:len(track)-1]
+		used[i] = false
+	}
+}
