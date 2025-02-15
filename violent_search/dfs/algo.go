@@ -1,5 +1,7 @@
 package dfs
 
+import "sort"
+
 // 全排列 https://leetcode.cn/problems/permutations/description/
 func permute(nums []int) [][]int {
 	var res [][]int
@@ -67,5 +69,32 @@ func backtrack2(nums []int, track []int, used []bool, res *[][]int) {
 		backtrack2(nums, track, used, res)
 		track = track[:len(track)-1]
 		used[i] = false
+	}
+}
+
+// 组合总数 https://leetcode.cn/problems/combination-sum/
+func combinationSum(candidates []int, target int) [][]int {
+	sort.Ints(candidates)
+	var res [][]int
+	var track []int
+	backtrack3(candidates, track, target, 0, &res)
+	return res
+}
+
+// start 是每轮循环中的起始位置，避免重复前面的选择
+func backtrack3(candidates []int, track []int, target int, start int, res *[][]int) {
+	if target == 0 {
+		temp := append([]int{}, track...)
+		*res = append(*res, temp)
+		return
+	}
+	for i := start; i < len(candidates); i++ {
+		// 因为candidates已经排序过了，所以后面的元素都比前面的大，可以直接剪枝
+		if target-candidates[i] < 0 {
+			return
+		}
+		track = append(track, candidates[i])
+		backtrack3(candidates, track, target-candidates[i], i, res)
+		track = track[:len(track)-1]
 	}
 }

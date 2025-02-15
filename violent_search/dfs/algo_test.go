@@ -68,3 +68,52 @@ func TestPermuteUnique(t *testing.T) {
 		}
 	}
 }
+
+func TestCombinationSum(t *testing.T) {
+	tests := []struct {
+		name       string
+		candidates []int
+		target     int
+		want       [][]int
+	}{
+		{
+			name:       "Test1",
+			candidates: []int{2, 3, 6, 7},
+			target:     7,
+			want:       [][]int{{2, 2, 3}, {7}},
+		},
+		{
+			name:       "Test2",
+			candidates: []int{2, 3, 5},
+			target:     8,
+			want:       [][]int{{2, 2, 2, 2}, {2, 3, 3}, {3, 5}},
+		},
+		{
+			name:       "Test3",
+			candidates: []int{2},
+			target:     1,
+			want:       [][]int{},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got := combinationSum(tt.candidates, tt.target)
+			if len(got) != len(tt.want) {
+				t.Errorf("combinationSum() = %v, want %v", got, tt.want)
+				return
+			}
+			for i := range got {
+				if len(got[i]) != len(tt.want[i]) {
+					t.Errorf("combinationSum() = %v, want %v", got, tt.want)
+					return
+				}
+				for j := range got[i] {
+					if got[i][j] != tt.want[i][j] {
+						t.Errorf("combinationSum() = %v, want %v", got, tt.want)
+						return
+					}
+				}
+			}
+		})
+	}
+}
