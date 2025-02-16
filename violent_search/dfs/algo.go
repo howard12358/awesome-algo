@@ -98,3 +98,32 @@ func backtrack3(candidates []int, track []int, target int, start int, res *[][]i
 		track = track[:len(track)-1]
 	}
 }
+
+// 组合总和II https://leetcode.cn/problems/combination-sum-ii/
+func combinationSum2(candidates []int, target int) [][]int {
+	sort.Ints(candidates)
+	var res [][]int
+	var track []int
+	backtrack4(candidates, track, target, 0, &res)
+	return res
+}
+
+func backtrack4(candidates []int, track []int, target int, start int, res *[][]int) {
+	if target == 0 {
+		temp := append([]int{}, track...)
+		*res = append(*res, temp)
+		return
+	}
+
+	for i := start; i < len(candidates); i++ {
+		if target-candidates[i] < 0 {
+			return
+		}
+		if i > start && candidates[i] == candidates[i-1] {
+			continue
+		}
+		track = append(track, candidates[i])
+		backtrack4(candidates, track, target-candidates[i], i+1, res)
+		track = track[:len(track)-1]
+	}
+}
