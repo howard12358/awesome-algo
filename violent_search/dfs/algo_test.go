@@ -117,3 +117,71 @@ func TestCombinationSum(t *testing.T) {
 		})
 	}
 }
+
+func TestCombinationSum2(t *testing.T) {
+	tests := []struct {
+		name       string
+		candidates []int
+		target     int
+		want       [][]int
+	}{
+		{
+			name:       "Test1",
+			candidates: []int{10, 1, 2, 7, 6, 1, 5},
+			target:     8,
+			want: [][]int{
+				{1, 1, 6},
+				{1, 2, 5},
+				{1, 7},
+				{2, 6},
+			},
+		},
+		{
+			name:       "Test2",
+			candidates: []int{2, 5, 2, 1, 2},
+			target:     5,
+			want: [][]int{
+				{1, 2, 2},
+				{5},
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := combinationSum2(tt.candidates, tt.target); !equal(got, tt.want) {
+				t.Errorf("combinationSum2() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func equal(a, b [][]int) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for _, v1 := range a {
+		found := false
+		for _, v2 := range b {
+			if equalSlice(v1, v2) {
+				found = true
+				break
+			}
+		}
+		if !found {
+			return false
+		}
+	}
+	return true
+}
+
+func equalSlice(a, b []int) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i, v := range a {
+		if v != b[i] {
+			return false
+		}
+	}
+	return true
+}
