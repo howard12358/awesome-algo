@@ -1,6 +1,8 @@
 package dfs
 
-import "sort"
+import (
+	"sort"
+)
 
 // 全排列 https://leetcode.cn/problems/permutations/description/
 func permute(nums []int) [][]int {
@@ -126,4 +128,29 @@ func backtrack4(candidates []int, track []int, target int, start int, res *[][]i
 		backtrack4(candidates, track, target-candidates[i], i+1, res)
 		track = track[:len(track)-1]
 	}
+}
+
+// 电话号码的字母组合 https://leetcode.cn/problems/letter-combinations-of-a-phone-number/
+func letterCombinations(digits string) []string {
+	if len(digits) == 0 {
+		return []string{}
+	}
+	var mapping = [...]string{"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"}
+	var res []string
+	var track []byte
+
+	var dfs func(i int)
+	dfs = func(i int) {
+		if i == len(digits) {
+			res = append(res, string(track))
+			return
+		}
+		for _, v := range mapping[digits[i]-'0'] {
+			track = append(track, byte(v))
+			dfs(i + 1)
+			track = track[:len(track)-1]
+		}
+	}
+	dfs(0)
+	return res
 }
