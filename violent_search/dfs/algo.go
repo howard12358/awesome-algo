@@ -4,6 +4,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"unicode"
 )
 
 // 全排列 https://leetcode.cn/problems/permutations/description/
@@ -181,6 +182,29 @@ func restoreIpAddresses(s string) []string {
 				track = append(track, str)
 				dfs(i + 1)
 				track = track[:len(track)-1]
+			}
+		}
+	}
+	dfs(0)
+	return res
+}
+
+// 字母大小写全排列 https://leetcode.cn/problems/letter-case-permutation/description/
+func letterCasePermutation(s string) []string {
+	var res []string
+	var track = []byte(s)
+	var dfs func(i int)
+	dfs = func(i int) {
+		res = append(res, string(track))
+		if i == len(s) {
+			return
+		}
+		for j := i; j < len(s); j++ {
+			// 如果是字母，就大小写转换
+			if unicode.IsLower(rune(track[j])) || unicode.IsUpper(rune(track[j])) {
+				track[j] ^= 32
+				dfs(j + 1)
+				track[j] ^= 32
 			}
 		}
 	}
