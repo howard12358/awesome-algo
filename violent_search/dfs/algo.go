@@ -2,6 +2,8 @@ package dfs
 
 import (
 	"sort"
+	"strconv"
+	"strings"
 )
 
 // 全排列 https://leetcode.cn/problems/permutations/description/
@@ -149,6 +151,37 @@ func letterCombinations(digits string) []string {
 			track = append(track, byte(v))
 			dfs(i + 1)
 			track = track[:len(track)-1]
+		}
+	}
+	dfs(0)
+	return res
+}
+
+// 复原 IP 地址 https://leetcode.cn/problems/restore-ip-addresses/
+func restoreIpAddresses(s string) []string {
+	var res []string
+	var track []string
+
+	var dfs func(start int)
+	dfs = func(start int) {
+		if len(track) == 4 {
+			if start == len(s) {
+				res = append(res, strings.Join(track, "."))
+			}
+			return
+		}
+
+		for i := start; i < len(s); i++ {
+			if i != start && s[start] == '0' {
+				break
+			}
+			str := s[start : i+1]
+			num, _ := strconv.Atoi(str)
+			if num >= 0 && num <= 255 {
+				track = append(track, str)
+				dfs(i + 1)
+				track = track[:len(track)-1]
+			}
 		}
 	}
 	dfs(0)
