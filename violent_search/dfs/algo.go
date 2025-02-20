@@ -211,3 +211,37 @@ func letterCasePermutation(s string) []string {
 	dfs(0)
 	return res
 }
+
+// 分割回文串 https://leetcode.cn/problems/palindrome-partitioning/description/
+func partition(s string) [][]string {
+	var res [][]string
+	var track []string
+	var dfs func(start int)
+	dfs = func(start int) {
+		if start == len(s) {
+			temp := append([]string{}, track...)
+			res = append(res, temp)
+			return
+		}
+		for i := start; i < len(s); i++ {
+			if isPalindrome(s, start, i) {
+				track = append(track, s[start:i+1])
+				dfs(i + 1)
+				track = track[:len(track)-1]
+			}
+		}
+	}
+	dfs(0)
+	return res
+}
+
+func isPalindrome(s string, left, right int) bool {
+	for left < right {
+		if s[left] != s[right] {
+			return false
+		}
+		left++
+		right--
+	}
+	return true
+}
