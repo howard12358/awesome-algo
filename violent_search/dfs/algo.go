@@ -13,7 +13,32 @@ func permute(nums []int) [][]int {
 	var track []int
 	used := make([]bool, len(nums))
 
-	backtrack(nums, track, used, &res)
+	var dfs func()
+	dfs = func() {
+		if len(track) == len(nums) {
+			temp := append([]int{}, track...)
+			res = append(res, temp)
+			return
+		}
+
+		for i := 0; i < len(nums); i++ {
+			// 排除重复的选择
+			if used[i] {
+				// 剪枝，避免重复使用同一个数字
+				continue
+			}
+			// 做选择
+			track = append(track, nums[i])
+			used[i] = true
+			// 进入下一层决策树
+			dfs()
+			// 撤销选择
+			track = track[:len(track)-1]
+			used[i] = false
+		}
+	}
+
+	dfs()
 	return res
 }
 
