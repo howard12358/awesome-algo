@@ -92,7 +92,97 @@ func minimumRecolors(blocks string, k int) int {
 }
 
 // https://leetcode.cn/problems/maximum-sum-of-almost-unique-subarray/description/
-func maxSum(nums []int, m int, k int) int64 {
+func maxSum(nums []int, m int, k int) (ans int64) {
+	sum := int64(0)
+	cntMap := map[int]int{}
+	for i, num := range nums {
+		sum += int64(num)
+		cntMap[num]++
+		if i-k+1 < 0 {
+			continue
+		}
 
-	return 0
+		if len(cntMap) >= m {
+			ans = max(ans, sum)
+		}
+
+		out := nums[i-k+1]
+		sum -= int64(out)
+		cntMap[out]--
+		if cntMap[out] == 0 {
+			delete(cntMap, out)
+		}
+	}
+	return
+}
+
+// https://leetcode.cn/problems/maximum-sum-of-distinct-subarrays-with-length-k/description/
+func maximumSubarraySum(nums []int, k int) (ans int64) {
+	sum := int64(0)
+	cntMap := map[int]int{}
+	for i, num := range nums {
+		sum += int64(num)
+		cntMap[num]++
+		if i-k+1 < 0 {
+			continue
+		}
+
+		if len(cntMap) == k {
+			ans = max(ans, sum)
+		}
+
+		out := nums[i-k+1]
+		sum -= int64(out)
+		cntMap[out]--
+		if cntMap[out] == 0 {
+			delete(cntMap, out)
+		}
+	}
+	return
+}
+
+// https://leetcode.cn/problems/maximum-points-you-can-obtain-from-cards/description/
+func maxScore(cardPoints []int, k int) int {
+	n := len(cardPoints)
+	sum := 0
+	for _, num := range cardPoints {
+		sum += num
+	}
+	if k == n {
+		return sum
+	}
+	s := 0
+	minS := sum
+	for i, num := range cardPoints {
+		s += num
+		left := i - (n - k) + 1
+		if left < 0 {
+			continue
+		}
+		minS = min(minS, s)
+
+		out := cardPoints[left]
+		s -= out
+	}
+	return sum - minS
+}
+
+// https://leetcode.cn/problems/grumpy-bookstore-owner/
+func maxSatisfied(customers []int, grumpy []int, minutes int) (ans int) {
+	m := map[int]int{
+		0: 0,
+		1: 0,
+	}
+	maxC := 0
+	for i, num := range customers {
+		m[grumpy[i]] += num
+		if i-minutes+1 < 0 {
+			continue
+		}
+		maxC = max(maxC, m[1])
+		if grumpy[i-minutes+1] == 1 {
+			m[1] -= customers[i-minutes+1]
+		}
+	}
+	return m[0] + maxC
 }
